@@ -16,7 +16,7 @@ const {NotImplementedError} = require('../extensions/index.js');
  *
  */
 function renameFiles(names) {
-    // Объект для отслеживания количества встреченных имен файлов
+/*    // Объект для отслеживания количества встреченных имен файлов
     const nameCount = {};
     return names.map(name => {
         let newName = name;
@@ -32,7 +32,7 @@ function renameFiles(names) {
         } // Обновляем счетчик для текущего имени
         nameCount[newName] = (nameCount[newName] || 0) + 1;
         return newName;
-    });
+    });*/
 }
 
 module.exports = {
