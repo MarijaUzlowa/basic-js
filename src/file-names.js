@@ -16,21 +16,19 @@ const {NotImplementedError} = require('../extensions/index.js');
  *
  */
 function renameFiles(names) {
-   /* const nameCount = {};
-    return names.map(name => {
-        let newName = name;
-        // Если имя уже встречалось
-        while (nameCount[newName]) {
-            // Добавляем суффикс
-            const suffix = `(${nameCount[newName]++})`;
-            newName = name.includes('(') ? name.replace(/\(\d+\)$/, suffix) : `${name}${suffix}`;
+    let num = 0;
+    let namesMod = names;
+    for (let i = 0; i < names.length; i++) {
+        for (let k = i + 1; k < names.length; k++) {
+            if (names[i] === names[k]) {
+                num++;
+                let namIn = names[k] + "(" + String(num) + ")";
+                namesMod.splice(k, 1, namIn);
+            }
         }
-        // Обновляем счетчик для текущего имени
-        nameCount[newName] = 1;
-        return newName;
-    });*/
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+        num = 0;
+    }
+    return namesMod;
 }
 
 module.exports = {
