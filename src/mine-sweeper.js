@@ -23,9 +23,40 @@ const { NotImplementedError } = require('../extensions/index.js');
  *  [1, 1, 1]
  * ]
  */
-function minesweeper(/* matrix */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+function minesweeper(matrix) {
+  const rows = matrix.length;
+  const cols = matrix[0].length;
+
+  // Создаем новую матрицу с нулями и заполняем ее значениями на основе наличия мин
+  const result = Array.from({ length: rows }, () =>
+      Array(cols).fill(0)
+  );
+
+  // Определение смещений для соседних клеток
+  const directions = [
+    [-1, -1], [-1, 0], [-1, 1],
+    [0, -1],           [0, 1],
+    [1, -1], [1, 0], [1, 1]
+  ];
+
+  // Перебираем каждую ячейку
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      // Если текущая ячейка содержит мину, увеличиваем значение вокруг нее
+      if (matrix[row][col]) {
+        for (const [dx, dy] of directions) {
+          const newRow = row + dx;
+          const newCol = col + dy;
+          // Проверяем, чтобы индексы ячейки были в пределах матрицы
+          if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols) {
+            result[newRow][newCol]++;
+          }
+        }
+      }
+    }
+  }
+
+  return result;
 }
 
 module.exports = {
