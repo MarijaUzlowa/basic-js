@@ -13,7 +13,7 @@ const { NotImplementedError } = require('../extensions/index.js');
  */
 function getSeason(date) {
   if (!(date instanceof Date) || isNaN(date)) {
-    throw new Error('Invalid date');
+    throw new Error('Invalid date - must be the number of months');
   }
 
   const month = date.getMonth();

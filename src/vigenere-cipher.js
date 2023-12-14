@@ -20,43 +20,65 @@ const {NotImplementedError} = require('../extensions/index.js');
  *
  */
 class VigenereCipheringMachine {
-    // Конструктор класса, принимает параметр reverse, по умолчанию равен false
-    constructor(reverse = false) {
-        // Если reverse равен true, сохраняем этот флаг в свойстве класса
-        this.reverse = reverse;
-    } // Метод для шифрования сообщения
-    encrypt(message, key) {
-        // Если сообщение или ключ не предоставлены, выбрасываем ошибку
-        if (!message || !key) {
-            throw new Error('Invalid input. Both message and key are required.');
-        } // Преобразование сообщения и ключа в верхний регистр
+    constructor(set = true) {
+        this.set = set;
+        this.alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",];
+    }
+
+    encrypt(message, value) {
+        if (!value || !message) {
+            throw new Error("Incorrect arguments given");
+        }
+
         message = message.toUpperCase();
-        key = key.toUpperCase();
-        let encryptedMessage = '';
-        let keyIndex = 0;
-        // Перебираем символы в сообщении
+        value = value.toUpperCase();
+        let result = "";
+        let index = 0;
+
         for (let i = 0; i < message.length; i++) {
-            const char = message[i]; // Если символ - буква, выполняем шифрование
-            if (/^[A-Z]$/.test(char)) { // Определение смещения для текущей буквы ключа
-                const keyChar = key[keyIndex % key.length];
-                const keyOffset = keyChar.charCodeAt(0) - 'A'.charCodeAt(0);
-                // Вычисление нового символа с учетом смещения
-                let encryptedChar;
-                if (this.reverse) {
-                    encryptedChar = String.fromCharCode(((char.charCodeAt(0) - keyOffset - 65 + 26) % 26) + 65);
-                } else {
-                    encryptedChar = String.fromCharCode(((char.charCodeAt(0) + keyOffset - 65) % 26) + 65);
-                } // Добавление зашифрованной буквы к результату
-                encryptedMessage += encryptedChar; // Увеличение индекса ключа для следующей итерации
-                keyIndex++;
-            } else { // Если символ не буква, просто добавляем его к результату без изменений
-                encryptedMessage += char;
+            if (!this.alphabet.includes(message[i])) {
+                result += message[i];
+                continue;
             }
-        } // Возвращаем зашифрованное сообщение
-        return encryptedMessage;
-    } // Метод для дешифрования сообщения
-    decrypt(message, key) { // Дешифрование аналогично шифрованию, но с использованием обратного смещения
-        return this.encrypt(message, key);
+            result =
+                result +
+                this.alphabet[
+                (this.alphabet.indexOf(message[i]) +
+                    this.alphabet.indexOf(value[index++ % value.length])) %
+                this.alphabet.length
+                    ];
+        }
+        return this.set ? result : result.split("").reverse().join("");
+    }
+
+    decrypt(message, value) {
+        if (!value || !message) {
+            throw new Error("Incorrect arguments given");
+        }
+
+        message = message.toUpperCase();
+        value = value.toUpperCase();
+        let result = "";
+        let index = 0;
+
+        for (let i = 0; i < message.length; i++) {
+            if (!this.alphabet.includes(message[i])) {
+                result = result + message[i];
+                continue;
+            }
+
+            let decr =
+                this.alphabet.indexOf(message[i]) -
+                (this.alphabet.indexOf(value[index++ % value.length]) %
+                    this.alphabet.length);
+
+            if (decr >= 0) {
+                result = result + this.alphabet[decr];
+            } else {
+                result = result + this.alphabet[this.alphabet.length + decr];
+            }
+        }
+        return this.set ? result : result.split("").reverse().join("");
     }
 }
 
